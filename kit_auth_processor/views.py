@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import requests
@@ -69,3 +70,8 @@ def login_view(request):
 @require_GET
 def protected_view(request):
     return JsonResponse({"message": "This is a protected resource."})
+=======
+from django.shortcuts import render
+
+# Create your views here.
+>>>>>>> 008bbafab7be62588713418cea62f4af91d3648d

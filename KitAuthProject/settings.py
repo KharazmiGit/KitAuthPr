@@ -1,8 +1,11 @@
 import os
 from datetime import timedelta
 from pathlib import Path
+<<<<<<< HEAD
 
 from django.conf.global_settings import MIDDLEWARE
+=======
+>>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -35,7 +38,11 @@ INSTALLED_APPS = [
     # endregion
 
     # region framework :
+<<<<<<< HEAD
     "corsheaders",
+=======
+
+>>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
     # API
     'rest_framework',
     'rest_framework_simplejwt',
@@ -44,9 +51,13 @@ INSTALLED_APPS = [
     # endregion
 ]
 
+<<<<<<< HEAD
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # Move this to the top!
+=======
+MIDDLEWARE = [
+>>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,10 +65,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+<<<<<<< HEAD
     # "kit_auth_processor.middleware.KeycloakAuthMiddleware",
 ]
 
 
+=======
+]
+
+>>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
 ROOT_URLCONF = 'KitAuthProject.urls'
 
 TEMPLATES = [
@@ -81,6 +97,7 @@ WSGI_APPLICATION = 'KitAuthProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 #
+<<<<<<< HEAD
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -103,6 +120,31 @@ DATABASES = {
 #     },
 # }
 
+=======
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'mssql',
+        'NAME': 'KharazmiDB',
+        'USER': 'CompUser',
+        'PASSWORD': 'qaz@123',
+        'HOST': '192.168.100.206',
+        'PORT': '1433',
+
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    },
+}
+
+>>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -145,11 +187,19 @@ AUTH_USER_MODEL = 'account.User'
 
 # region rest-frame-work
 REST_FRAMEWORK = {
+<<<<<<< HEAD
     # 'DEFAULT_AUTHENTICATION_CLASSES': [
     #     'rest_framework_simplejwt.authentication.JWTAuthentication',
     # ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny'
+=======
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+>>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
     ],
     'DEFAULT_SCHEMA_CLASS':
         'drf_spectacular.openapi.AutoSchema',
@@ -164,6 +214,7 @@ SIMPLE_JWT = {
 }
 # endregion
 
+<<<<<<< HEAD
 # region keycloak
 
 KEYCLOAK_URL = "http://localhost:9090/realms/KitAuthRealm/protocol/openid-connect/token"
@@ -196,3 +247,7 @@ CORS_ALLOW_METHODS = [
     "DELETE",
     "OPTIONS",
 ]
+=======
+
+LOGIN_URL = '../admin/'
+>>>>>>> 008bbafab7be62588713418cea62f4af91d3648d

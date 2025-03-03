@@ -20,12 +20,19 @@ from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
+<<<<<<< HEAD
     path('secure/source/', admin.site.urls),
+=======
+    path('admin/', admin.site.urls),
+>>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
     path('api-auth/', include('rest_framework.urls')),
 
     # region Apps :
     path('account/', include('account.urls')),
+<<<<<<< HEAD
     path('', include('kit_auth_processor.urls')),
+=======
+>>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
     # endregion
 
     # region Frameworks :

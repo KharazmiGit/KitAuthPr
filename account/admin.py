@@ -34,11 +34,10 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ['username', 'email', 'personnel_code']
     ordering = ['username']
     filter_horizontal = []
-<<<<<<< HEAD
+
     # readonly_fields = ['username']
-=======
+
     readonly_fields = ['username']
->>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
 
 
 # Register the new UserAdmin

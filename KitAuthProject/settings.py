@@ -1,11 +1,6 @@
 import os
 from datetime import timedelta
 from pathlib import Path
-<<<<<<< HEAD
-
-from django.conf.global_settings import MIDDLEWARE
-=======
->>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,7 +18,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,26 +32,17 @@ INSTALLED_APPS = [
     # endregion
 
     # region framework :
-<<<<<<< HEAD
     "corsheaders",
-=======
 
->>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
     # API
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_spectacular',
-
     # endregion
 ]
 
-<<<<<<< HEAD
-
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # Move this to the top!
-=======
-MIDDLEWARE = [
->>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -65,15 +50,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-<<<<<<< HEAD
-    # "kit_auth_processor.middleware.KeycloakAuthMiddleware",
+
+
+    "kit_auth_processor.middleware.KeycloakAuthMiddleware",
 ]
 
-
-=======
-]
-
->>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
 ROOT_URLCONF = 'KitAuthProject.urls'
 
 TEMPLATES = [
@@ -94,41 +75,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'KitAuthProject.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-#
-<<<<<<< HEAD
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'mssql',
-#         'NAME': 'KharazmiDB',
-#         'USER': 'CompUser',
-#         'PASSWORD': 'qaz@123',
-#         'HOST': '192.168.100.206',
-#         'PORT': '1433',
-#
-#         'OPTIONS': {
-#             'driver': 'ODBC Driver 17 for SQL Server',
-#         },
-#     },
-# }
-
-=======
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
@@ -137,93 +83,56 @@ DATABASES = {
         'PASSWORD': 'qaz@123',
         'HOST': '192.168.100.206',
         'PORT': '1433',
-
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
     },
 }
 
->>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
 # Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
 STATIC_URL = 'static/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'account.User'
 
-# region rest-frame-work
+# REST framework settings
 REST_FRAMEWORK = {
-<<<<<<< HEAD
     # 'DEFAULT_AUTHENTICATION_CLASSES': [
     #     'rest_framework_simplejwt.authentication.JWTAuthentication',
     # ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
-=======
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
->>>>>>> 008bbafab7be62588713418cea62f4af91d3648d
-    ],
-    'DEFAULT_SCHEMA_CLASS':
-        'drf_spectacular.openapi.AutoSchema',
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated'
+    # ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
-# endregion
 
-<<<<<<< HEAD
-# region keycloak
-
+# Keycloak settings
 KEYCLOAK_URL = "http://localhost:9090/realms/KitAuthRealm/protocol/openid-connect/token"
 KEYCLOAK_CLIENT_ID = "KitAuthCliID"
 KEYCLOAK_CLIENT_SECRET = "oVZgpYXSM9GlZf8qUadytfgnQp08r8qX"
-
-# endregion
-
-LOGIN_URL = '../admin/'
 
 # CORS Settings (for Vue frontend)
 from corsheaders.defaults import default_headers
@@ -247,7 +156,5 @@ CORS_ALLOW_METHODS = [
     "DELETE",
     "OPTIONS",
 ]
-=======
 
 LOGIN_URL = '../admin/'
->>>>>>> 008bbafab7be62588713418cea62f4af91d3648d

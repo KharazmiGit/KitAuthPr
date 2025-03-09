@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     # region app :
     'account',
     'kit_auth_processor',
+    'robots',
     # endregion
 
     # region framework :

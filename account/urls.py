@@ -1,13 +1,12 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, auth_test
-
+from .views import UserViewSet, index
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
 
 app_name = 'account'
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('test', auth_test),
+    path('user/crud', include(router.urls)),
+    path('', index , name='index_page'),
 ]

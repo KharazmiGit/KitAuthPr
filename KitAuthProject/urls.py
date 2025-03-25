@@ -26,7 +26,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
 
     # region Apps :
-    path('account/', include('account.urls')),
+    path('', include('account.urls')),
     path('robot/' , include('robots.urls')) ,
     path('', include('kit_auth_processor.urls')),
 

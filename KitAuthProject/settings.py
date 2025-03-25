@@ -1,6 +1,8 @@
 import os
 from datetime import timedelta
 from pathlib import Path
+
+from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -52,7 +54,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-
     "kit_auth_processor.middleware.KeycloakAuthMiddleware",
 ]
 
@@ -76,19 +77,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'KitAuthProject.wsgi.application'
 
+# region db
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'KharazmiDB',
+#         'USER': 'CompUser',
+#         'PASSWORD': 'qaz@123',
+#         'HOST': '192.168.100.206',
+#         'PORT': '1433',
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',
+#         },
+#     },
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'mssql',
-        'NAME': 'KharazmiDB',
-        'USER': 'CompUser',
-        'PASSWORD': 'qaz@123',
-        'HOST': '192.168.100.206',
-        'PORT': '1433',
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
-        },
-    },
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "mydatabase",
+    }
 }
+
+# endregion
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -106,6 +119,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -123,7 +139,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -131,7 +147,7 @@ SIMPLE_JWT = {
 }
 
 # Keycloak settings
-KEYCLOAK_URL = "http://localhost:9090/realms/KitAuthRealm/protocol/openid-connect/token"
+KEYCLOAK_URL = "http://localhost:8080/realms/KitAuthRealm/protocol/openid-connect/token"
 KEYCLOAK_CLIENT_ID = "KitAuthCliID"
 KEYCLOAK_CLIENT_SECRET = "oVZgpYXSM9GlZf8qUadytfgnQp08r8qX"
 
@@ -158,4 +174,20 @@ CORS_ALLOW_METHODS = [
     "OPTIONS",
 ]
 
-LOGIN_URL = '../admin/'
+LOGIN_URL = reverse_lazy('auth_processor:login_page')
+
+AUTHENTICATION_BACKENDS = [
+    'mozilla_django_oidc.auth.OIDCAuthenticationBackend',  # Keycloak authentication
+    'django.contrib.auth.backends.ModelBackend',  # Default Django auth
+]
+
+# Keycloak Settings
+OIDC_RP_CLIENT_ID = "KitAuthCliID"
+OIDC_RP_CLIENT_SECRET = "oVZgpYXSM9GlZf8qUadytfgnQp08r8qX"
+OIDC_OP_JWKS_ENDPOINT = "http://localhost:8080/realms/KitAuthRealm/protocol/openid-connect/certs"
+OIDC_OP_AUTHORIZATION_ENDPOINT = "http://localhost:8080/realms/KitAuthRealm/protocol/openid-connect/auth"
+OIDC_OP_TOKEN_ENDPOINT = "http://localhost:8080/realms/KitAuthRealm/protocol/openid-connect/token"
+OIDC_OP_USER_ENDPOINT = "http://localhost:8080/realms/KitAuthRealm/protocol/openid-connect/userinfo"
+
+# Allow authentication with Keycloak tokens
+OIDC_RP_SIGN_ALGO = "RS256"

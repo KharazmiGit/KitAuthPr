@@ -1,52 +1,56 @@
-import selenium
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status, permissions, authentication
+from .models import UserAction
+from .serializers import UserActionSerializer
+from mozilla_django_oidc.auth import OIDCAuthenticationBackend
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+from django.contrib.auth import get_user_model
+from rest_framework.authentication import BaseAuthentication
+import jwt
+
+User = get_user_model()
 
 
-def hello_world(request):
-    try:
-        # Start Firefox WebDriver
-        driver = selenium.webdriver.Firefox(service=Service(r"C:\Users\k.foroozanfard\Desktop\geckodriver.exe"))
+class KeycloakAuthentication(BaseAuthentication):
+    def authenticate(self, request):
+        auth_header = request.headers.get("Authorization")
+        if not auth_header:
+            return None  # No token provided, return AnonymousUser
 
-        # Open the login page
-        driver.get("http://localhost:8080/login")
+        token = auth_header.split(" ")[1]  # Extract token from "Bearer <token>"
 
-        # Wait for elements to be present
-        wait = WebDriverWait(driver, 10)
-        username = wait.until(EC.presence_of_element_located((By.ID, "login-username")))
-        password = wait.until(EC.presence_of_element_located((By.ID, "login-password")))
-        btn = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div/div/div[2]/form/button")))
+        # Decode the token (Make sure to verify it using Keycloak's public key)
+        try:
+            decoded_token = jwt.decode(token,
+                                       options={"verify_signature": False})
+            username = decoded_token.get("preferred_username")
+            email = decoded_token.get("email")
+            sub = decoded_token.get("sub")  # Unique Keycloak user ID
 
-        # Enter username and password
-        username.send_keys("kiarash")
-        password.send_keys("kiarash")
+            if not username:
+                return None  # Invalid token, no username found
 
-        # Click the login button
-        btn.click()
+            # Check if user exists in Django
+            user, created = User.objects.get_or_create(username=username, defaults={"email": email})
 
-        # Wait for the user list page to load
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "table")))
+            return user, token
+        except jwt.ExpiredSignatureError:
+            return None
+        except jwt.DecodeError:
+            return None
 
-        # Extract users from the table
-        users = []
-        rows = driver.find_elements(By.CSS_SELECTOR, "tbody tr")
-        for row in rows:
-            cols = row.find_elements(By.TAG_NAME, "td")
-            if len(cols) >= 3:  # Ensure it has enough columns
-                users.append({
-                    "username": cols[1].text.strip(),
-                    "password": cols[2].text.strip(),  # Consider removing password for security
-                    "email": cols[3].text.strip(),
-                })
 
-        # Close the browser
-        driver.quit()
+class SaveUserActionView(APIView):
+    authentication_classes = [KeycloakAuthentication]  # Use Keycloak authentication
 
-        return JsonResponse({"status": "success", "users": users})
 
-    except Exception as e:
-        return JsonResponse({"status": "error", "message": str(e)})
+    def post(self, request):
+        serializer = UserActionSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response({"message": "User actions saved successfully"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

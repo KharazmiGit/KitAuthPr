@@ -10,6 +10,6 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
 
 
-@login_required()
-def auth_test(request):
-    return render(request, 'index.html')
+
+def index(request):
+    return render(request , 'index.html')

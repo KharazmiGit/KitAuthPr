@@ -1,12 +1,15 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 import requests
 from django.conf import settings
 import re
 
 EXCLUDED_URLS = [
     r"^/api/login/$",
-    # r"^/account/users/?$",
+    r"^/authentication/page",
+    # Add other excluded URLs here
 ]
+
+LOGIN_URL = "/authentication/page"  # Redirect URL for unauthorized users
 
 
 def validate_token(token):
@@ -33,17 +36,26 @@ class KeycloakAuthMiddleware:
             response["Access-Control-Allow-Headers"] = "Authorization, Content-Type"
             return response
 
-        # Exclude login URLs
+        # Exclude specific URLs
         for pattern in EXCLUDED_URLS:
             if re.match(pattern, request.path):
                 return self.get_response(request)
 
+        # Check for token in Authorization header
         auth_header = request.headers.get("Authorization")
-        if not auth_header or not auth_header.startswith("Bearer "):
-            return JsonResponse({"error": "Unauthorized"}, status=401)
+        token = None
 
-        token = auth_header.split(" ")[1]
-        if not validate_token(token):
-            return JsonResponse({"error": "Invalid token"}, status=401)
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]
+        else:
+            # Check for token in cookies
+            token = request.COOKIES.get("access_token")
 
+        # Validate the token
+        if not token or not validate_token(token):
+            if request.headers.get("Accept") == "application/json":
+                return JsonResponse({"error": "Unauthorized"}, status=401)
+            return HttpResponseRedirect(LOGIN_URL)  # Redirect to login page
+
+        # If token is valid, proceed with the request
         return self.get_response(request)

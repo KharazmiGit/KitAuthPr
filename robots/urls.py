@@ -4,5 +4,5 @@ from . import views
 app_name = "robot_app"
 
 urlpatterns = [
-    path('login', views.hello_world, name='login_robot')
+    path('save-actions/', views.SaveUserActionView.as_view(), name='save-actions'),
 ]

@@ -1,5 +1,5 @@
 # Django imports
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
@@ -83,7 +83,7 @@ def protected_view(request):
     return JsonResponse({"message": "This is a protected resource."})
 
 
-class LoginPageView(View):
+class LoginPageView(View):  # internal !!!
     def get(self, request):
         # Render the login page for GET requests
         return render(request, 'auth/login.html')
@@ -114,10 +114,9 @@ class LoginPageView(View):
             if keycloak_response.status_code == 200:
                 token_data = keycloak_response.json()
 
-                # Create a JSON response
                 json_response = JsonResponse({
                     "message": "Login successful",
-                    "redirect_url": reverse('account:index_page')  # Dynamically generate the home URL
+                    "redirect_url": reverse('account:index_page')
                 }, status=status.HTTP_200_OK)
 
                 # Set cookies for access_token and refresh_token

@@ -79,26 +79,26 @@ WSGI_APPLICATION = 'KitAuthProject.wsgi.application'
 
 # region db
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'mssql',
-#         'NAME': 'KharazmiDB',
-#         'USER': 'CompUser',
-#         'PASSWORD': 'qaz@123',
-#         'HOST': '192.168.100.206',
-#         'PORT': '1433',
-#         'OPTIONS': {
-#             'driver': 'ODBC Driver 17 for SQL Server',
-#         },
-#     },
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "mydatabase",
-    }
+    'default': {
+        'ENGINE': 'mssql',
+        'NAME': 'KharazmiDB',
+        'USER': 'CompUser',
+        'PASSWORD': 'qaz@123',
+        'HOST': '192.168.100.206',
+        'PORT': '1433',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    },
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "mydatabase",
+#     }
+# }
 
 # endregion
 
